@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пьяный математик 🍸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculator {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Comfortaa', cursive;
+            color: #e64a19;
+            text-align: center;
+            margin: 0 0 25px;
+            font-size: 2.2em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-weight: 700;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffccbc;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #ffab91;
+            outline: none;
+            box-shadow: 0 0 8px #ffab91;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff7043, #ffab40);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255,112,67,0.3);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #fff8f5;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            min-height: 80px;
+        }
+
+        .warning {
+            color: #e64a19;
+            font-size: 0.9em;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .emoji {
+            font-size: 1.3em;
+        }
+
+        @media (max-width: 480px) {
+            .calculator {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>🍻 АлкоКалькулятор 3000 🥂</h1>
+        
+        <div class="input-group">
+            <label>Ваш пол:</label>
+            <select id="gender">
+                <option value="male">Мужчина 🧔</option>
+                <option value="female">Женщина 👩</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Вес (кг):</label>
+            <input type="number" id="weight" min="30" max="200" placeholder="Например: 75">
+        </div>
+
+        <div class="input-group">
+            <label>Количество выпитого (мл):</label>
+            <input type="number" id="volume" min="10" placeholder="Не стесняйтесь, мы не осуждаем 🍺">
+        </div>
+
+        <div class="input-group">
+            <label>Крепость напитка (%):</label>
+            <input type="number" id="strength" min="1" max="96" step="0.5" placeholder="От 4% до 96% 🥃">
+        </div>
+
+        <button onclick="calculate()">Рассчитать трезвость</button>
+        
+        <div class="result" id="result">
+            Здесь появится ваш результат...
+        </div>
+
+        <div class="warning">
+            ⚠️ Результаты приблизительны! Лучше перебдеть, чем недобдеть!
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const gender = document.getElementById('gender').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const volume = parseFloat(document.getElementById('volume').value);
+            const strength = parseFloat(document.getElementById('strength').value);
+
+            if (!weight || !volume || !strength) {
+                alert('Заполните все поля как следует! 🧐');
+                return;
+            }
+
+            // Формула Видмарка с коэффициентами
+            const alcohol = (volume * strength * 0.789) / 100;
+            const metabolism = gender === 'male' ? 0.68 : 0.55;
+            const BAC = alcohol / (weight * metabolism);
+            
+            // Время выведения (0.15‰ в час)
+            const hours = BAC / 0.15;
+            const minutes = Math.round((hours % 1) * 60);
+
+            // Генерация результата
+            let resultText = `⏱️ Примерное время выветривания: 
+                ${Math.floor(hours)} ч ${minutes} мин<br>`;
+            
+            if(hours > 24) {
+                resultText += '😱 Вызывайте такси и берите отгул!';
+            } else if(hours > 12) {
+                resultText += '😴 Хорошенький сон — лучшее лекарство!';
+            } else if(hours > 5) {
+                resultText += '🚗 Не садитесь за руль!';
+            } else {
+                resultText += '🎉 Можно (но не нужно) ещё одну!';
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
